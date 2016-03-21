@@ -9,7 +9,7 @@
 import ObjectMapper
 import UIKit
 
-class UserDefaults: ObjectMapperProtocol {
+class UserDefaults: Mappable {
     
     var id: AnyObject?;
     var name: AnyObject?;
@@ -19,7 +19,7 @@ class UserDefaults: ObjectMapperProtocol {
         
     }
     
-    required init?(id: AnyObject, name: AnyObject, streetAddress: AnyObject) {
+    init(id: AnyObject, name: AnyObject, streetAddress: AnyObject) {
         self.id = id;
         self.name = name;
         self.streetAddress = streetAddress;
@@ -29,7 +29,7 @@ class UserDefaults: ObjectMapperProtocol {
     func mapping(map: Map) {
         id    <- map["id"]
         name         <- map["name"]
-        streetAddress      <- map["streeAddress"]
+        streetAddress      <- map["streetAddress"]
 
     }
 }

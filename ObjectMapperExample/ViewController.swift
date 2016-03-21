@@ -21,21 +21,17 @@ class ViewController: UIViewController, WKScriptMessageHandler {
         //first, we'll set up a bridge between the javascript file and this controller
         let contentController = WKUserContentController()
         let userDefaultsHelper = UserDefaultsHelper()
-        let userDefaultsObject = userDefaultsHelper.getValue()
-        
+        let userDefaultsJSON = userDefaultsHelper.getValue()
+
         let userScript = WKUserScript(
-            source: "loadUserDefaults('" + String(userDefaultsObject.id) + "')",
+            source: "loadUserDefaults('" + String(userDefaultsJSON) + "')",
             injectionTime: WKUserScriptInjectionTime.AtDocumentEnd,
             forMainFrameOnly: true
         )
-        contentController.addUserScript(userScript)
+
+
         
-        let userScript2 = WKUserScript(
-            source: "initializeIDList()",
-            injectionTime: WKUserScriptInjectionTime.AtDocumentEnd,
-            forMainFrameOnly: true
-        )
-        contentController.addUserScript(userScript2)
+        contentController.addUserScript(userScript)
         
         contentController.addScriptMessageHandler(
             self,
@@ -56,7 +52,7 @@ class ViewController: UIViewController, WKScriptMessageHandler {
     override func viewDidLoad() {
         super.viewDidLoad()
         let userDefaultsObject = userDefaultsHelper.getValue()
-        print (userDefaultsObject.name)
+        print(userDefaultsObject)
         
         let url = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("index", ofType: "html")!)
         let req = NSURLRequest(URL: url)
@@ -67,12 +63,13 @@ class ViewController: UIViewController, WKScriptMessageHandler {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if(message.name == "callbackHandler") {
             print ("Sending object to UserDefaults")
+            print("testy" + String(message.body))
             let jsonUserDefaults = message.body["userDefaults"] as! NSDictionary
             let userDefaultsHelper = UserDefaultsHelper()
             userDefaultsHelper.setDefaultValues(jsonUserDefaults["id"]!, name: jsonUserDefaults["name"]!, streetAddress: jsonUserDefaults["streetAddress"]!)
             
             
-            print(jsonUserDefaults["id"]!)
+            print(jsonUserDefaults)
         }
     }
     override func didReceiveMemoryWarning() {

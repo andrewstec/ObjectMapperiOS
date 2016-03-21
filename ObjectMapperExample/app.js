@@ -1,8 +1,10 @@
 var serviceUrl = "http://ssdprogram.ca/apple.php"
 
-function initializeIDList() {
+function initializeIDList(defaultListNumValue) {
+    
     jQuery.support.cors = true;
     var method = $('#method').val();
+    $("#idList").replaceWith("<select id='peopleList' />");
     $.ajax({
            type: method,
            url: serviceUrl
@@ -13,8 +15,7 @@ function initializeIDList() {
                    }).error(function (jqXHR, textStatus, errorThrown) {
                             $('#idList').text(jqXHR.responseText || textStatus);
                             });
-    $("#idList").replaceWith("<select id='peopleList' />");
-
+    $("#peopleList option[value=" + defaultListNumValue + "]").attr('selected', 'selected')
 }
 
 function initializeListCallback(val) {
@@ -50,32 +51,10 @@ function findByID() {
           });
 }
 
-function loadUserDefaults(id) {
-    jQuery.support.cors = true;
-    
-    
-    $.getJSON(serviceUrl + "?id=" + id,
-              function (data) {
-              if (data == null) {
-              $('#idResult').text('Please check your internet connection.');
-              }
-              var str = "ID: " + data.id + ' Name: ' + data.name + ' Address: ' + data.streetAddress;
+function loadUserDefaults(userDefaultsJSON) {
+    var userDefaults = jQuery.parseJSON(userDefaultsJSON)
+              var str = "ID: " + userDefaults.id + ' Name: ' + userDefaults.name + ' Address: ' + userDefaults.streetAddress;
               $("#idResult").replaceWith("<div id='idResult'><br/><span>" + str + "</span></div>");
-              
-              //sends JavaScript message to the class to save User Defaults with code below:
-              var message = {
-              "userDefaults":
-                {
-                    "name": data.name,
-                    "streetAddress" : data.streetAddress,
-                    "id" : data.id
-                }
-              }
-              $("#peopleList").val(data.id);
-              webkit.messageHandlers.callbackHandler.postMessage(message);
-              })
-    .fail(
-          function (jqueryHeaderRequest, textStatus, err) {
-          $('#idResult').text('Find error: ' + err);
-          });
+              initializeIDList(userDefaults.id);
+
 }

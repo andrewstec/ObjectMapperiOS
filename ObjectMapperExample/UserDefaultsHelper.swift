@@ -6,6 +6,7 @@
 //  Copyright © 2016 Andrew Stec. All rights reserved.
 //
 
+import ObjectMapper
 import UIKit
 
 class UserDefaultsHelper: NSObject {
@@ -21,13 +22,14 @@ class UserDefaultsHelper: NSObject {
         print (userDefaults.objectForKey("streetAddress")!);
     }
     
-    func getValue() -> UserDefaults {
+    func getValue() -> AnyObject {
         if userDefaults.objectForKey("id") != nil  {
             let userDefaultsObject = UserDefaults(id: userDefaults.objectForKey("id")!, name: userDefaults.objectForKey("name")!, streetAddress: userDefaults.objectForKey("streetAddress")!)
-            return userDefaultsObject!
+            let JSONString = Mapper().toJSONString(userDefaultsObject)
+            return JSONString!
         }
         else {
-            return UserDefaults(id: 0, name: "null", streetAddress: "null")!
+            return UserDefaults(id: 0, name: "null", streetAddress: "null")
         }
     }
 }
