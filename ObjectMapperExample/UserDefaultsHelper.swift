@@ -24,10 +24,10 @@ class UserDefaultsHelper: NSObject {
     func getValue() -> UserDefaults {
         if userDefaults.objectForKey("id") != nil  {
             let userDefaultsObject = UserDefaults(id: userDefaults.objectForKey("id")!, name: userDefaults.objectForKey("name")!, streetAddress: userDefaults.objectForKey("streetAddress")!)
-            return userDefaultsObject
+            return userDefaultsObject!
         }
         else {
-            return UserDefaults(id: 0, name: "null", streetAddress: "null")
+            return UserDefaults(id: 0, name: "null", streetAddress: "null")!
         }
     }
 }

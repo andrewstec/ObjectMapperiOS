@@ -1,0 +1,6 @@
+framework module Pods_ObjectMapperExampleUITests {
+  umbrella header "Pods-ObjectMapperExampleUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

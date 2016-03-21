@@ -6,17 +6,30 @@
 //  Copyright © 2016 Andrew Stec. All rights reserved.
 //
 
+import ObjectMapper
 import UIKit
 
-class UserDefaults: NSObject {
+class UserDefaults: ObjectMapperProtocol {
     
-    var id: AnyObject;
-    var name: AnyObject;
-    var streetAddress: AnyObject;
+    var id: AnyObject?;
+    var name: AnyObject?;
+    var streetAddress: AnyObject?;
     
-    init(id: AnyObject, name: AnyObject, streetAddress: AnyObject) {
+    required init?(_ map: Map) {
+        
+    }
+    
+    required init?(id: AnyObject, name: AnyObject, streetAddress: AnyObject) {
         self.id = id;
         self.name = name;
         self.streetAddress = streetAddress;
+    }
+    
+    // Mappable
+    func mapping(map: Map) {
+        id    <- map["id"]
+        name         <- map["name"]
+        streetAddress      <- map["streeAddress"]
+
     }
 }
